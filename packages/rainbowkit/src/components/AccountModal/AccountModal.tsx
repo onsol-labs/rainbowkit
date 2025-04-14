@@ -1,6 +1,6 @@
 import React from 'react';
 import { useAccount, useDisconnect } from 'wagmi';
-import { useProfile } from '../../hooks/useProfile';
+import { useProfileMulti } from '../../hooks/useProfile';
 import { Dialog } from '../Dialog/Dialog';
 import { DialogContent } from '../Dialog/DialogContent';
 import { ProfileDetails } from '../ProfileDetails/ProfileDetails';
@@ -12,7 +12,7 @@ export interface AccountModalProps {
 
 export function AccountModal({ onClose, open }: AccountModalProps) {
   const { address } = useAccount();
-  const { balance, ensAvatar, ensName } = useProfile({
+  const { balance, ensAvatar, ensName } = useProfileMulti({
     address,
     includeBalance: open,
   });

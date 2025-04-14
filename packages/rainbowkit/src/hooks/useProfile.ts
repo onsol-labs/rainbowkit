@@ -2,6 +2,8 @@ import type { Address } from 'viem';
 import { useBalance } from 'wagmi';
 import { useMainnetEnsAvatar } from './useMainnetEnsAvatar';
 import { useMainnetEnsName } from './useMainnetEnsName';
+import { useMonadTestnetAnsName } from './useMonadTestnetAnsName';
+import { useIsMonadTestnetConfigured } from './useIsMonadTestnetConfigured';
 
 interface UseProfileParameters {
   address?: Address;
@@ -16,4 +18,28 @@ export function useProfile({ address, includeBalance }: UseProfileParameters) {
   });
 
   return { ensName, ensAvatar, balance };
+}
+
+export function useProfileMonadTestnet({
+  address,
+  includeBalance,
+}: UseProfileParameters) {
+  const ansName = useMonadTestnetAnsName(address);
+  const { data: balance } = useBalance({
+    address: includeBalance ? address : undefined,
+  });
+
+  return { ensName: ansName, ensAvatar: undefined, balance };
+}
+
+export function useProfileMulti({
+  address,
+  includeBalance,
+}: UseProfileParameters) {
+  const monadTestnetConfigured = useIsMonadTestnetConfigured();
+
+  if (monadTestnetConfigured) {
+    return useProfileMonadTestnet({ address, includeBalance });
+  }
+  return useProfile({ address, includeBalance });
 }

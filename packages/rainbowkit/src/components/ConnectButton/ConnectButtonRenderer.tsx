@@ -2,7 +2,7 @@ import React, { type ReactNode, useContext } from 'react';
 import { useAccount, useConfig } from 'wagmi';
 import { normalizeResponsiveValue } from '../../css/sprinkles.css';
 import { useIsMounted } from '../../hooks/useIsMounted';
-import { useProfile } from '../../hooks/useProfile';
+import { useProfileMulti } from '../../hooks/useProfile';
 import { useRecentTransactions } from '../../transactions/useRecentTransactions';
 import { isMobile } from '../../utils/isMobile';
 import { useAsyncImage } from '../AsyncImage/useAsyncImage';
@@ -100,7 +100,7 @@ export function ConnectButtonRenderer({
 
   const shouldShowBalance = computeShouldShowBalance();
 
-  const { balance, ensAvatar, ensName } = useProfile({
+  const { balance, ensAvatar, ensName } = useProfileMulti({
     address,
     includeBalance: shouldShowBalance,
   });

@@ -1,8 +1,38 @@
+import { NetworkWithRpc, TldParser } from '@onsol/tldparser';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import type { NextPage } from 'next';
 import Image from 'next/image';
+import { useEffect, useState } from 'react';
+import { useAccount } from 'wagmi';
+import { monadTestnet } from 'wagmi/chains';
 
 const Home: NextPage = () => {
+  const [mainDomain, setMainDomain] = useState<string | null>(null);
+
+  const account = useAccount();
+
+  useEffect(() => {
+    const fetchMainDomain = async (accountAddress: string) => {
+      try {
+        const network = new NetworkWithRpc(
+          monadTestnet.name,
+          monadTestnet.id,
+          monadTestnet.rpcUrls.default.http[0],
+        );
+        const parser = new TldParser(network, 'monad');
+        const domain = await parser.getMainDomain(accountAddress);
+        setMainDomain(domain.domain_name + domain.tld);
+      } catch (error) {
+        console.error('Error fetching main domain:', error);
+      }
+    };
+
+    // Fetch the main domain only if the account is available
+    if (account?.address) {
+      fetchMainDomain(account.address);
+    }
+  }, [account?.address]);
+
   return (
     <div
       style={{
@@ -80,7 +110,7 @@ const Home: NextPage = () => {
                     </button>
 
                     <button onClick={openAccountModal} type="button">
-                      {account.displayName}
+                      {mainDomain ? mainDomain : account.displayName}
                       {account.displayBalance
                         ? ` (${account.displayBalance})`
                         : ''}
