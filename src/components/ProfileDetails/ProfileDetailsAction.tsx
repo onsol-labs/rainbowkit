@@ -6,11 +6,10 @@ import { Text } from '../Text/Text';
 
 interface ProfileDetailsActionProps {
   label: string;
-  action?: (() => void) | ((address: string) => void); // Fixed parenthesis for union type
+  action?: () => void;
   icon: JSX.Element;
   url?: string;
   testId?: string;
-  address?: string;
 }
 
 export function ProfileDetailsAction({
@@ -19,20 +18,8 @@ export function ProfileDetailsAction({
   label,
   testId,
   url,
-  address
 }: ProfileDetailsActionProps) {
   const mobile = isMobile();
-
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    if (typeof action === 'function') {
-      if (action.length === 0) {
-        if (address) {action(address)} else {action}
-      } else {
-        if (address) {action(address)} else {action}
-      }
-    }
-  };
-
   return (
     <Box
       {...(url
@@ -49,7 +36,7 @@ export function ProfileDetailsAction({
         hover: !mobile ? 'grow' : undefined,
       })}
       display="flex"
-      onClick={handleClick}
+      onClick={action}
       padding={mobile ? '6' : '8'}
       style={{ willChange: 'transform' }}
       testId={testId}

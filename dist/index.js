@@ -2716,7 +2716,6 @@ function RainbowKitProvider({
   showRecentTransactions = false,
   theme = defaultTheme,
   viewProfileAction
-  // New prop
 }) {
   usePreloadImages();
   useFingerprint();
@@ -3310,27 +3309,9 @@ function ProfileDetailsAction({
   icon,
   label,
   testId,
-  url,
-  address
+  url
 }) {
   const mobile = isMobile();
-  const handleClick = (event) => {
-    if (typeof action === "function") {
-      if (action.length === 0) {
-        if (address) {
-          action(address);
-        } else {
-          action;
-        }
-      } else {
-        if (address) {
-          action(address);
-        } else {
-          action;
-        }
-      }
-    }
-  };
   return /* @__PURE__ */ React33.createElement(
     Box,
     {
@@ -3346,7 +3327,7 @@ function ProfileDetailsAction({
         hover: !mobile ? "grow" : void 0
       }),
       display: "flex",
-      onClick: handleClick,
+      onClick: action,
       padding: mobile ? "6" : "8",
       style: { willChange: "transform" },
       testId,
@@ -3386,6 +3367,12 @@ function ProfileDetails({
     if (address) {
       navigator.clipboard.writeText(address);
       setCopiedAddress(true);
+    }
+  }, [address]);
+  const viewProfileActionHandler = useCallback8(() => {
+    if (address && viewProfileAction) {
+      viewProfileAction.action(address);
+      onClose();
     }
   }, [address]);
   useEffect12(() => {
@@ -3499,11 +3486,10 @@ function ProfileDetails({
     viewProfileAction && /* @__PURE__ */ React34.createElement(
       ProfileDetailsAction,
       {
-        action: viewProfileAction.action,
+        action: viewProfileActionHandler,
         icon: viewProfileAction.icon,
         label: viewProfileAction.label,
-        testId: "view-profile-button",
-        address
+        testId: "view-profile-button"
       }
     )
   )), showRecentTransactions && /* @__PURE__ */ React34.createElement(React34.Fragment, null, /* @__PURE__ */ React34.createElement(Box, { background: "generalBorder", height: "1", marginTop: "-1" }), /* @__PURE__ */ React34.createElement(Box, null, /* @__PURE__ */ React34.createElement(TxList, { address })))));

@@ -29,7 +29,7 @@ export interface RainbowKitProviderProps {
     locale?: Locale;
     viewProfileAction?: {
         label: string;
-        action: (address: string) => void;
+        action: () => void;
         icon: JSX.Element;
     };
 }

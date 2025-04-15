@@ -52,6 +52,13 @@ export function ProfileDetails({
     }
   }, [address]);
 
+  const viewProfileActionHandler = useCallback(() => {
+    if (address && viewProfileAction) {
+      viewProfileAction.action(address);
+      onClose();
+    }
+  }, [address]);
+
   useEffect(() => {
     if (copiedAddress) {
       const timer = setTimeout(() => {
@@ -161,11 +168,10 @@ export function ProfileDetails({
             />
             {viewProfileAction && (
               <ProfileDetailsAction
-                action={viewProfileAction.action} // Wrap action to pass address
+                action={viewProfileActionHandler} // Wrap action to pass address
                 icon={viewProfileAction.icon}
                 label={viewProfileAction.label}
                 testId="view-profile-button"
-                address={address} 
               />
             )}
           </Box>

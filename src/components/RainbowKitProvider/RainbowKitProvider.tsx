@@ -75,7 +75,7 @@ export interface RainbowKitProviderProps {
   locale?: Locale;
   viewProfileAction?: {
     label: string;
-    action: (address: string) => void;
+    action: () => void;
     icon: JSX.Element;
   };
 }
@@ -93,7 +93,7 @@ export function RainbowKitProvider({
   modalSize = ModalSizeOptions.WIDE,
   showRecentTransactions = false,
   theme = defaultTheme,
-  viewProfileAction, // New prop
+  viewProfileAction,
 }: RainbowKitProviderProps) {
   usePreloadImages();
   useFingerprint();

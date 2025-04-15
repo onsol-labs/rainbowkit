@@ -3,7 +3,7 @@ interface ModalProviderProps {
     children: ReactNode;
     viewProfileAction?: {
         label: string;
-        action: (address: string) => void;
+        action: () => void;
         icon: JSX.Element;
     };
 }
@@ -24,7 +24,7 @@ export declare function useChainModal(): {
 export declare function useViewProfileData(): {
     viewProfileAction: {
         label: string;
-        action: (address: string) => void;
+        action: () => void;
         icon: JSX.Element;
     } | undefined;
 };
