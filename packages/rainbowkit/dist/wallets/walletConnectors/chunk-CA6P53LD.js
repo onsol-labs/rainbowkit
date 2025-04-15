@@ -4,7 +4,7 @@ import {
 } from "./chunk-75A5A7MH.js";
 
 // src/wallets/walletConnectors/hahaWallet/hahaWallet.ts
-var haha = ({
+var hahaWallet = ({
   projectId,
   walletConnectParameters
 }) => ({
@@ -67,5 +67,5 @@ var haha = ({
 });
 
 export {
-  haha
+  hahaWallet
 };

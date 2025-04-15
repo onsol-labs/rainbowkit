@@ -1,13 +1,13 @@
 "use client";
 import {
+  lightTheme
+} from "./chunk-72HZGUJA.js";
+import {
   darkTheme
 } from "./chunk-RZWDCITT.js";
 import {
   midnightTheme
 } from "./chunk-7ZP3ENJ2.js";
-import {
-  lightTheme
-} from "./chunk-72HZGUJA.js";
 import "./chunk-DQLAW7KN.js";
 import {
   en_US_default

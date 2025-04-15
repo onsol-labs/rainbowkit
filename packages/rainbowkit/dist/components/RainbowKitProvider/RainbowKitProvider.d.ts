@@ -1,4 +1,4 @@
-import React, { type ReactNode } from 'react';
+import { type JSX, type ReactNode } from 'react';
 import type { Chain } from 'wagmi/chains';
 import type { ThemeVars } from '../../css/sprinkles.css';
 import type { Locale } from '../../locales';
@@ -27,5 +27,10 @@ export interface RainbowKitProviderProps {
     avatar?: AvatarComponent;
     modalSize?: ModalSizes;
     locale?: Locale;
+    viewProfileAction?: {
+        label: string;
+        action: (address: string) => void;
+        icon: JSX.Element;
+    };
 }
-export declare function RainbowKitProvider({ appInfo, avatar, children, coolMode, id, initialChain, locale, modalSize, showRecentTransactions, theme, }: RainbowKitProviderProps): React.JSX.Element;
+export declare function RainbowKitProvider({ appInfo, avatar, children, coolMode, id, initialChain, locale, modalSize, showRecentTransactions, theme, viewProfileAction, }: RainbowKitProviderProps): JSX.Element;

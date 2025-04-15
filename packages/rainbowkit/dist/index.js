@@ -3,18 +3,18 @@ import {
   lightTheme
 } from "./chunk-72HZGUJA.js";
 import {
-  midnightTheme
-} from "./chunk-7ZP3ENJ2.js";
-import {
   darkTheme
 } from "./chunk-RZWDCITT.js";
+import {
+  midnightTheme
+} from "./chunk-7ZP3ENJ2.js";
 import "./chunk-DQLAW7KN.js";
 import {
   en_US_default
 } from "./chunk-4WMQ4TNV.js";
 
 // src/components/ConnectButton/ConnectButton.tsx
-import React60, { useContext as useContext22, useEffect as useEffect18, useState as useState15 } from "react";
+import React60, { useContext as useContext23, useEffect as useEffect18, useState as useState15 } from "react";
 
 // src/css/sprinkles.css.ts
 import { createMapValueFn as _51c72 } from "@vanilla-extract/sprinkles/createUtils";
@@ -1096,7 +1096,7 @@ function ShowBalanceProvider({ children }) {
 var useShowBalance = () => useContext4(ShowBalanceContext);
 
 // src/components/ConnectButton/ConnectButtonRenderer.tsx
-import React59, { useContext as useContext21 } from "react";
+import React59, { useContext as useContext22 } from "react";
 import { useAccount as useAccount14, useConfig as useConfig4 } from "wagmi";
 
 // src/hooks/useIsMounted.ts
@@ -1398,6 +1398,105 @@ function useMainnetEnsName(address) {
   return ensName || enhancedProviderEnsName;
 }
 
+// src/hooks/useMonadTestnetAnsName.ts
+import { monadTestnet } from "wagmi/chains";
+
+// src/utils/ans.ts
+import { isAddress as isAddress2 } from "viem";
+function getStorageAnsNameKey(address) {
+  return `rk-ans-name-${address}`;
+}
+function safeParseJsonData2(string) {
+  try {
+    const value = string ? JSON.parse(string) : null;
+    return typeof value === "object" ? value : null;
+  } catch {
+    return null;
+  }
+}
+function addAnsName(address, ansName) {
+  if (!isAddress2(address)) return;
+  const now = /* @__PURE__ */ new Date();
+  const expiry = new Date(now.getTime() + 180 * 6e4);
+  localStorage.setItem(
+    getStorageAnsNameKey(address),
+    JSON.stringify({
+      ansName,
+      expires: expiry.getTime()
+    })
+  );
+}
+function getAnsName(address) {
+  const data = safeParseJsonData2(
+    localStorage.getItem(getStorageAnsNameKey(address))
+  );
+  if (!data) return null;
+  const { ansName, expires } = data;
+  if (typeof ansName !== "string" || Number.isNaN(Number(expires))) {
+    localStorage.removeItem(getStorageAnsNameKey(address));
+    return null;
+  }
+  const now = /* @__PURE__ */ new Date();
+  if (now.getTime() > Number(expires)) {
+    localStorage.removeItem(getStorageAnsNameKey(address));
+    return null;
+  }
+  return ansName;
+}
+
+// src/hooks/useMonadTestnetAnsName.ts
+import { NetworkWithRpc, TldParser } from "@onsol/tldparser";
+import { useQuery as useQuery2 } from "@tanstack/react-query";
+async function getOnchainAnsName({ address }) {
+  const ensName = getAnsName(address);
+  if (ensName) return ensName;
+  try {
+    const network = new NetworkWithRpc(
+      monadTestnet.name,
+      monadTestnet.id,
+      monadTestnet.rpcUrls.default.http[0]
+    );
+    const parser = new TldParser(network, "monad");
+    const mainDomain = await parser.getMainDomain(address);
+    const onChainAnsName = mainDomain.domain_name + mainDomain.tld;
+    if (onChainAnsName) {
+      addAnsName(address, onChainAnsName);
+    }
+    return onChainAnsName;
+  } catch {
+    return null;
+  }
+}
+function useMonadTestnetAnsName(address) {
+  let ansNameValue = null;
+  try {
+    const { data: ansName } = useQuery2({
+      queryKey: createQueryKey("address", address),
+      queryFn: () => getOnchainAnsName({ address }),
+      enabled: !!address,
+      staleTime: 10 * (60 * 1e3),
+      // 10 minutes
+      retry: 1
+      // Retry once before returning undefined if the request fails
+    });
+    ansNameValue = ansName;
+  } catch (e) {
+    console.error(e);
+  }
+  return ansNameValue;
+}
+
+// src/hooks/useIsMonadTestnetConfigured.ts
+import { monadTestnet as monadTestnet2 } from "wagmi/chains";
+function useIsMonadTestnetConfigured() {
+  const rainbowKitChains = useRainbowKitChains();
+  const chainId = monadTestnet2.id;
+  const configured = rainbowKitChains.some(
+    (rainbowKitChain) => rainbowKitChain.id === chainId
+  );
+  return configured;
+}
+
 // src/hooks/useProfile.ts
 function useProfile({ address, includeBalance }) {
   const ensName = useMainnetEnsName(address);
@@ -1406,6 +1505,26 @@ function useProfile({ address, includeBalance }) {
     address: includeBalance ? address : void 0
   });
   return { ensName, ensAvatar, balance };
+}
+function useProfileMonadTestnet({
+  address,
+  includeBalance
+}) {
+  const ansName = useMonadTestnetAnsName(address);
+  const { data: balance } = useBalance({
+    address: includeBalance ? address : void 0
+  });
+  return { ensName: ansName, ensAvatar: void 0, balance };
+}
+function useProfileMulti({
+  address,
+  includeBalance
+}) {
+  const monadTestnetConfigured = useIsMonadTestnetConfigured();
+  if (monadTestnetConfigured) {
+    return useProfileMonadTestnet({ address, includeBalance });
+  }
+  return useProfile({ address, includeBalance });
 }
 
 // src/transactions/useRecentTransactions.ts
@@ -1425,7 +1544,7 @@ import { useAccount as useAccount4, useBalance as useBalance2, usePublicClient }
 
 // src/transactions/transactionStore.ts
 var storageKey = "rk-transactions";
-function safeParseJsonData2(string) {
+function safeParseJsonData3(string) {
   try {
     const value = string ? JSON.parse(string) : {};
     return typeof value === "object" ? value : {};
@@ -1434,7 +1553,7 @@ function safeParseJsonData2(string) {
   }
 }
 function loadData() {
-  return safeParseJsonData2(
+  return safeParseJsonData3(
     typeof localStorage !== "undefined" ? localStorage.getItem(storageKey) : null
   );
 }
@@ -1647,7 +1766,7 @@ function useRecentTransactions() {
 import React58, {
   createContext as createContext12,
   useCallback as useCallback10,
-  useContext as useContext20,
+  useContext as useContext21,
   useEffect as useEffect17,
   useMemo as useMemo8,
   useState as useState14
@@ -2597,6 +2716,7 @@ function RainbowKitProvider({
   showRecentTransactions = false,
   theme = defaultTheme,
   viewProfileAction
+  // New prop
 }) {
   usePreloadImages();
   useFingerprint();
@@ -3190,9 +3310,27 @@ function ProfileDetailsAction({
   icon,
   label,
   testId,
-  url
+  url,
+  address
 }) {
   const mobile = isMobile();
+  const handleClick = (event) => {
+    if (typeof action === "function") {
+      if (action.length === 0) {
+        if (address) {
+          action(address);
+        } else {
+          action;
+        }
+      } else {
+        if (address) {
+          action(address);
+        } else {
+          action;
+        }
+      }
+    }
+  };
   return /* @__PURE__ */ React33.createElement(
     Box,
     {
@@ -3208,7 +3346,7 @@ function ProfileDetailsAction({
         hover: !mobile ? "grow" : void 0
       }),
       display: "flex",
-      onClick: action,
+      onClick: handleClick,
       padding: mobile ? "6" : "8",
       style: { willChange: "transform" },
       testId,
@@ -3241,7 +3379,6 @@ function ProfileDetails({
   onClose,
   onDisconnect,
   viewProfileAction
-  // Accept custom action
 }) {
   const showRecentTransactions = useContext10(ShowRecentTransactionsContext);
   const [copiedAddress, setCopiedAddress] = useState10(false);
@@ -3365,7 +3502,8 @@ function ProfileDetails({
         action: viewProfileAction.action,
         icon: viewProfileAction.icon,
         label: viewProfileAction.label,
-        testId: "view-profile-button"
+        testId: "view-profile-button",
+        address
       }
     )
   )), showRecentTransactions && /* @__PURE__ */ React34.createElement(React34.Fragment, null, /* @__PURE__ */ React34.createElement(Box, { background: "generalBorder", height: "1", marginTop: "-1" }), /* @__PURE__ */ React34.createElement(Box, null, /* @__PURE__ */ React34.createElement(TxList, { address })))));
@@ -3374,12 +3512,12 @@ function ProfileDetails({
 // src/components/AccountModal/AccountModal.tsx
 function AccountModal({ onClose, open }) {
   const { address } = useAccount10();
-  const { balance, ensAvatar, ensName } = useProfile({
+  const { balance, ensAvatar, ensName } = useProfileMulti({
     address,
     includeBalance: open
   });
   const { disconnect } = useDisconnect();
-  const { viewProfileAction } = useViewProfileContext();
+  const { viewProfileAction } = useViewProfileData();
   if (!address) {
     return null;
   }
@@ -3399,7 +3537,7 @@ function AccountModal({ onClose, open }) {
 }
 
 // src/components/ChainModal/ChainModal.tsx
-import React39, { useContext as useContext12, useState as useState11 } from "react";
+import React39, { useContext as useContext13, useState as useState11 } from "react";
 import { useAccount as useAccount11, useDisconnect as useDisconnect2, useSwitchChain } from "wagmi";
 import { useConfig as useConfig2 } from "wagmi";
 
@@ -3485,7 +3623,7 @@ var MenuButton = React37.forwardRef(
 MenuButton.displayName = "MenuButton";
 
 // src/components/ChainModal/Chain.tsx
-import React38, { Fragment, useContext as useContext11 } from "react";
+import React38, { Fragment, useContext as useContext12 } from "react";
 var Chain = ({
   chainId,
   currentChainId,
@@ -3498,7 +3636,7 @@ var Chain = ({
   idx
 }) => {
   const mobile = isMobile();
-  const { i18n: i18n2 } = useContext11(I18nContext);
+  const { i18n: i18n2 } = useContext12(I18nContext);
   const rainbowkitChains = useRainbowKitChains();
   const isCurrentChain = currentChainId === chainId;
   return /* @__PURE__ */ React38.createElement(Fragment, null, /* @__PURE__ */ React38.createElement(
@@ -3612,7 +3750,7 @@ function ChainModal({ onClose, open }) {
       }
     }
   });
-  const { i18n: i18n2 } = useContext12(I18nContext);
+  const { i18n: i18n2 } = useContext13(I18nContext);
   const { disconnect } = useDisconnect2();
   const titleId = "rk_chain_modal_title";
   const mobile = isMobile();
@@ -3726,12 +3864,12 @@ import React57 from "react";
 import { useAccount as useAccount12, useDisconnect as useDisconnect3 } from "wagmi";
 
 // src/components/ConnectOptions/ConnectOptions.tsx
-import React56, { useContext as useContext19 } from "react";
+import React56, { useContext as useContext20 } from "react";
 
 // src/components/ConnectOptions/DesktopOptions.tsx
 import React53, {
   Fragment as Fragment2,
-  useContext as useContext16,
+  useContext as useContext17,
   useEffect as useEffect15,
   useRef as useRef4,
   useState as useState12
@@ -3754,7 +3892,7 @@ function groupBy(items, getKey) {
 }
 
 // src/components/ConnectModal/ConnectModalIntro.tsx
-import React42, { useContext as useContext13 } from "react";
+import React42, { useContext as useContext14 } from "react";
 
 // src/components/Disclaimer/DisclaimerLink.tsx
 import React40 from "react";
@@ -3786,8 +3924,8 @@ function ConnectModalIntro({
   compactModeEnabled = false,
   getWallet
 }) {
-  const { disclaimer: Disclaimer, learnMoreUrl } = useContext13(AppContext);
-  const { i18n: i18n2 } = useContext13(I18nContext);
+  const { disclaimer: Disclaimer, learnMoreUrl } = useContext14(AppContext);
+  const { i18n: i18n2 } = useContext14(I18nContext);
   return /* @__PURE__ */ React42.createElement(React42.Fragment, null, /* @__PURE__ */ React42.createElement(
     Box,
     {
@@ -3925,10 +4063,10 @@ var InfoButton = ({
 import React46 from "react";
 
 // src/components/RainbowKitProvider/useCoolMode.ts
-import { useContext as useContext14, useEffect as useEffect13, useRef as useRef3 } from "react";
+import { useContext as useContext15, useEffect as useEffect13, useRef as useRef3 } from "react";
 var useCoolMode = (imageUrl) => {
   const ref = useRef3(null);
-  const coolModeEnabled = useContext14(CoolModeContext);
+  const coolModeEnabled = useContext15(CoolModeContext);
   const resolvedImageUrl = useAsyncImage(imageUrl);
   useEffect13(() => {
     if (coolModeEnabled && ref.current && resolvedImageUrl) {
@@ -4194,7 +4332,7 @@ function clearLatestWalletId() {
 }
 
 // src/components/ConnectOptions/ConnectDetails.tsx
-import React52, { useContext as useContext15, useEffect as useEffect14 } from "react";
+import React52, { useContext as useContext16, useEffect as useEffect14 } from "react";
 
 // src/utils/colors.ts
 var convertHexToRGBA = (hexCode, opacity = 1) => {
@@ -4474,7 +4612,7 @@ function GetDetail({
     (wallet) => wallet.isRainbowKitConnector
   );
   const shownWallets = wallets.splice(0, 5);
-  const { i18n: i18n2 } = useContext15(I18nContext);
+  const { i18n: i18n2 } = useContext16(I18nContext);
   return /* @__PURE__ */ React52.createElement(
     Box,
     {
@@ -4585,7 +4723,7 @@ function ConnectDetail({
   } = wallet;
   const isDesktopDeepLinkAvailable = !!getDesktopUri;
   const safari = isSafari();
-  const { i18n: i18n2 } = useContext15(I18nContext);
+  const { i18n: i18n2 } = useContext16(I18nContext);
   const hasExtension = !!wallet.extensionDownloadUrl;
   const hasQrCodeAndExtension = downloadUrls?.qrCode && hasExtension;
   const hasQrCodeAndDesktop = downloadUrls?.qrCode && !!wallet.desktopDownloadUrl;
@@ -4958,7 +5096,7 @@ function DownloadOptionsDetail({
 }) {
   const browser = getBrowser();
   const platform = getPlatform();
-  const modalSize = useContext15(ModalSizeContext);
+  const modalSize = useContext16(ModalSizeContext);
   const isCompact = modalSize === "compact";
   const {
     desktop,
@@ -4967,7 +5105,7 @@ function DownloadOptionsDetail({
     extensionDownloadUrl,
     mobileDownloadUrl
   } = wallet;
-  const { i18n: i18n2 } = useContext15(I18nContext);
+  const { i18n: i18n2 } = useContext16(I18nContext);
   useEffect14(() => {
     preloadCreateIcon();
     preloadScanIcon();
@@ -5063,7 +5201,7 @@ function DownloadDetail({
   wallet
 }) {
   const { downloadUrls, qrCode } = wallet;
-  const { i18n: i18n2 } = useContext15(I18nContext);
+  const { i18n: i18n2 } = useContext16(I18nContext);
   useEffect14(() => {
     preloadCreateIcon();
     preloadScanIcon();
@@ -5126,7 +5264,7 @@ function InstructionMobileDetail({
   connectWallet,
   wallet
 }) {
-  const { i18n: i18n2 } = useContext15(I18nContext);
+  const { i18n: i18n2 } = useContext16(I18nContext);
   return /* @__PURE__ */ React52.createElement(
     Box,
     {
@@ -5214,7 +5352,7 @@ function InstructionMobileDetail({
 function InstructionExtensionDetail({
   wallet
 }) {
-  const { i18n: i18n2 } = useContext15(I18nContext);
+  const { i18n: i18n2 } = useContext16(I18nContext);
   return /* @__PURE__ */ React52.createElement(
     Box,
     {
@@ -5303,7 +5441,7 @@ function InstructionDesktopDetail({
   connectWallet,
   wallet
 }) {
-  const { i18n: i18n2 } = useContext15(I18nContext);
+  const { i18n: i18n2 } = useContext16(I18nContext);
   return /* @__PURE__ */ React52.createElement(
     Box,
     {
@@ -5397,13 +5535,13 @@ function DesktopOptions({ onClose }) {
   const [qrCodeUri, setQrCodeUri] = useState12();
   const hasQrCode = !!selectedWallet?.qrCode && qrCodeUri;
   const [connectionError, setConnectionError] = useState12(false);
-  const modalSize = useContext16(ModalSizeContext);
+  const modalSize = useContext17(ModalSizeContext);
   const compactModeEnabled = modalSize === ModalSizeOptions.COMPACT;
-  const { disclaimer: Disclaimer } = useContext16(AppContext);
-  const { i18n: i18n2 } = useContext16(I18nContext);
+  const { disclaimer: Disclaimer } = useContext17(AppContext);
+  const { i18n: i18n2 } = useContext17(I18nContext);
   const safari = isSafari();
   const initialized = useRef4(false);
-  const { connector } = useContext16(WalletButtonContext);
+  const { connector } = useContext17(WalletButtonContext);
   const mergeEIP6963WithRkConnectors = !connector;
   const wallets = useWalletConnectors(mergeEIP6963WithRkConnectors).filter((wallet) => wallet.ready || !!wallet.extensionDownloadUrl).sort((a, b) => a.groupIndex - b.groupIndex);
   const unfilteredWallets = useWalletConnectors();
@@ -5811,7 +5949,7 @@ function DesktopOptions({ onClose }) {
 // src/components/ConnectOptions/MobileOptions.tsx
 import React54, {
   useCallback as useCallback9,
-  useContext as useContext17,
+  useContext as useContext18,
   useEffect as useEffect16,
   useRef as useRef5,
   useState as useState13
@@ -5867,7 +6005,7 @@ function WalletButton({
   } = wallet;
   const coolModeRef = useCoolMode(iconUrl);
   const initialized = useRef5(false);
-  const { i18n: i18n2 } = useContext17(I18nContext);
+  const { i18n: i18n2 } = useContext18(I18nContext);
   const onConnect = useCallback9(async () => {
     const onMobileUri = async () => {
       const mobileUri = await getMobileUri?.();
@@ -5963,7 +6101,7 @@ function MobileOptions({ onClose }) {
   const wallets = useWalletConnectors().filter(
     (wallet) => wallet.isRainbowKitConnector
   );
-  const { disclaimer: Disclaimer, learnMoreUrl } = useContext17(AppContext);
+  const { disclaimer: Disclaimer, learnMoreUrl } = useContext18(AppContext);
   let headerLabel = null;
   let walletContent = null;
   let headerBackgroundContrast = false;
@@ -5971,7 +6109,7 @@ function MobileOptions({ onClose }) {
   const [walletStep, setWalletStep] = useState13(
     "CONNECT" /* Connect */
   );
-  const { i18n: i18n2 } = useContext17(I18nContext);
+  const { i18n: i18n2 } = useContext18(I18nContext);
   const ios = isIOS();
   switch (walletStep) {
     case "CONNECT" /* Connect */: {
@@ -6209,10 +6347,10 @@ function MobileOptions({ onClose }) {
 }
 
 // src/components/ConnectOptions/MobileStatus.tsx
-import React55, { useContext as useContext18 } from "react";
+import React55, { useContext as useContext19 } from "react";
 var MobileStatus = ({ onClose }) => {
-  const { connector } = useContext18(WalletButtonContext);
-  const { i18n: i18n2 } = useContext18(I18nContext);
+  const { connector } = useContext19(WalletButtonContext);
+  const { i18n: i18n2 } = useContext19(I18nContext);
   const connectorName = connector?.name || "";
   return /* @__PURE__ */ React55.createElement(Box, null, /* @__PURE__ */ React55.createElement(
     Box,
@@ -6256,7 +6394,7 @@ var MobileStatus = ({ onClose }) => {
 
 // src/components/ConnectOptions/ConnectOptions.tsx
 function ConnectOptions({ onClose }) {
-  const { connector } = useContext19(WalletButtonContext);
+  const { connector } = useContext20(WalletButtonContext);
   return isMobile() ? connector ? /* @__PURE__ */ React56.createElement(MobileStatus, { onClose }) : /* @__PURE__ */ React56.createElement(MobileOptions, { onClose }) : /* @__PURE__ */ React56.createElement(DesktopOptions, { onClose });
 }
 
@@ -6375,7 +6513,7 @@ function ModalProvider({ children, viewProfileAction }) {
   );
 }
 function useModalState() {
-  const { accountModalOpen, chainModalOpen, connectModalOpen } = useContext20(ModalContext);
+  const { accountModalOpen, chainModalOpen, connectModalOpen } = useContext21(ModalContext);
   return {
     accountModalOpen,
     chainModalOpen,
@@ -6383,23 +6521,23 @@ function useModalState() {
   };
 }
 function useAccountModal() {
-  const { accountModalOpen, openAccountModal } = useContext20(ModalContext);
+  const { accountModalOpen, openAccountModal } = useContext21(ModalContext);
   return { accountModalOpen, openAccountModal };
 }
 function useChainModal() {
-  const { chainModalOpen, openChainModal } = useContext20(ModalContext);
+  const { chainModalOpen, openChainModal } = useContext21(ModalContext);
   return { chainModalOpen, openChainModal };
 }
-function useViewProfileContext() {
-  const { viewProfileAction } = useContext20(ModalContext);
+function useViewProfileData() {
+  const { viewProfileAction } = useContext21(ModalContext);
   return { viewProfileAction };
 }
 function useWalletConnectOpenState() {
-  const { isWalletConnectModalOpen, setIsWalletConnectModalOpen } = useContext20(ModalContext);
+  const { isWalletConnectModalOpen, setIsWalletConnectModalOpen } = useContext21(ModalContext);
   return { isWalletConnectModalOpen, setIsWalletConnectModalOpen };
 }
 function useConnectModal() {
-  const { connectModalOpen, openConnectModal } = useContext20(ModalContext);
+  const { connectModalOpen, openConnectModal } = useContext21(ModalContext);
   const { isWalletConnectModalOpen } = useWalletConnectOpenState();
   return {
     connectModalOpen: connectModalOpen || isWalletConnectModalOpen,
@@ -6427,7 +6565,7 @@ function ConnectButtonRenderer({
   const chainIconUrl = rainbowKitChain?.iconUrl ?? void 0;
   const chainIconBackground = rainbowKitChain?.iconBackground ?? void 0;
   const resolvedChainIconUrl = useAsyncImage(chainIconUrl);
-  const showRecentTransactions = useContext21(ShowRecentTransactionsContext);
+  const showRecentTransactions = useContext22(ShowRecentTransactionsContext);
   const hasPendingTransactions = useRecentTransactions().some(({ status }) => status === "pending") && showRecentTransactions;
   const { showBalance } = useShowBalance();
   const computeShouldShowBalance = () => {
@@ -6440,7 +6578,7 @@ function ConnectButtonRenderer({
     return true;
   };
   const shouldShowBalance = computeShouldShowBalance();
-  const { balance, ensAvatar, ensName } = useProfile({
+  const { balance, ensAvatar, ensName } = useProfileMulti({
     address,
     includeBalance: shouldShowBalance
   });
@@ -6498,7 +6636,7 @@ function ConnectButton({
   const connectionStatus = useConnectionStatus();
   const { setShowBalance } = useShowBalance();
   const [ready, setReady] = useState15(false);
-  const { i18n: i18n2 } = useContext22(I18nContext);
+  const { i18n: i18n2 } = useContext23(I18nContext);
   useEffect18(() => {
     setShowBalance(showBalance);
     if (!ready) setReady(true);
@@ -6685,7 +6823,7 @@ function ConnectButton({
                 )
               },
               account.displayName
-            ), /* @__PURE__ */ React60.createElement(DropdownIcon, null))
+            ))
           )
         )
       )) : /* @__PURE__ */ React60.createElement(
@@ -6719,7 +6857,7 @@ ConnectButton.__defaultProps = defaultProps;
 ConnectButton.Custom = ConnectButtonRenderer;
 
 // src/components/WalletButton/WalletButton.tsx
-import React62, { useContext as useContext24 } from "react";
+import React62, { useContext as useContext25 } from "react";
 
 // src/components/WalletButton/WalletButton.css.ts
 var border = "WalletButton_border__1y2lnfi0";
@@ -6727,7 +6865,7 @@ var maxWidth = "WalletButton_maxWidth__1y2lnfi1";
 
 // src/components/WalletButton/WalletButtonRenderer.tsx
 import React61, {
-  useContext as useContext23,
+  useContext as useContext24,
   useEffect as useEffect19,
   useMemo as useMemo9,
   useState as useState16
@@ -6742,7 +6880,7 @@ function WalletButtonRenderer({
   const isMounted = useIsMounted();
   const { openConnectModal } = useConnectModal();
   const { connectModalOpen } = useModalState();
-  const { connector, setConnector } = useContext23(WalletButtonContext);
+  const { connector, setConnector } = useContext24(WalletButtonContext);
   const [firstConnector] = useWalletConnectors().filter((wallet2) => wallet2.isRainbowKitConnector).filter((_wallet) => _wallet.id.toLowerCase() === wallet.toLowerCase()).sort((a, b) => a.groupIndex - b.groupIndex);
   if (!firstConnector) {
     throw new Error("Connector not found");
@@ -6806,7 +6944,7 @@ function WalletButtonRenderer({
 var WalletButton2 = ({ wallet }) => {
   return /* @__PURE__ */ React62.createElement(WalletButtonRenderer, { wallet }, ({ ready, connect, connected, mounted, connector, loading }) => {
     const isDisabled = !ready || loading;
-    const { i18n: i18n2 } = useContext24(I18nContext);
+    const { i18n: i18n2 } = useContext25(I18nContext);
     const connectorName = connector?.name || "";
     if (!mounted) return;
     return /* @__PURE__ */ React62.createElement(
@@ -6884,19 +7022,7 @@ var WalletButton2 = ({ wallet }) => {
               /* @__PURE__ */ React62.createElement(Box, { testId: `wallet-button-label-${connector?.id || ""}` }, loading ? i18n2.t("connect.status.connecting", {
                 wallet: connectorName
               }) : connectorName)
-            ),
-            connected ? /* @__PURE__ */ React62.createElement(
-              Box,
-              {
-                background: "connectionIndicator",
-                borderColor: "selectedOptionBorder",
-                borderRadius: "full",
-                borderStyle: "solid",
-                borderWidth: "1",
-                height: "8",
-                width: "8"
-              }
-            ) : null
+            )
           )
         )
       )

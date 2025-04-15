@@ -1,22 +1,22 @@
 "use client";
 import {
-  xdefiWallet
-} from "./chunk-OIXI65DW.js";
-import {
-  zerionWallet
-} from "./chunk-B3KYHH6S.js";
+  xPortalWallet
+} from "./chunk-WYDSY7DV.js";
 import {
   zealWallet
-} from "./chunk-UC2COR6N.js";
+} from "./chunk-HO2UAOZV.js";
+import {
+  zerionWallet
+} from "./chunk-U5U6XAQO.js";
 import {
   tokenPocketWallet
-} from "./chunk-5OINR77X.js";
+} from "./chunk-IA3F7IL2.js";
 import {
   tokenaryWallet
 } from "./chunk-S6WAQ7RT.js";
 import {
   trustWallet
-} from "./chunk-FAT6QIQ2.js";
+} from "./chunk-42T4UNAI.js";
 import {
   valoraWallet
 } from "./chunk-ZFAXCBJT.js";
@@ -30,41 +30,41 @@ import {
   wigwamWallet
 } from "./chunk-YPJ5675X.js";
 import {
-  xPortalWallet
-} from "./chunk-HSZE4NPR.js";
+  xdefiWallet
+} from "./chunk-OIXI65DW.js";
 import {
   roninWallet
-} from "./chunk-CCEQ264Z.js";
+} from "./chunk-6PSAQNOV.js";
 import {
   safeWallet
 } from "./chunk-XB3GM6SJ.js";
 import {
+  safepalWallet
+} from "./chunk-3WS776JS.js";
+import {
   safeheronWallet
 } from "./chunk-FH36NIB5.js";
 import {
-  safepalWallet
-} from "./chunk-3LPUTAS2.js";
+  subWallet
+} from "./chunk-JPQAJKUX.js";
 import {
   seifWallet
 } from "./chunk-4RLH2CF3.js";
 import {
-  subWallet
-} from "./chunk-JIGFYBR7.js";
+  talismanWallet
+} from "./chunk-U64E24KT.js";
 import {
   tahoWallet
 } from "./chunk-BZIGYIPA.js";
 import {
-  talismanWallet
-} from "./chunk-U64E24KT.js";
+  okxWallet
+} from "./chunk-HTOPKFOW.js";
 import {
   omniWallet
 } from "./chunk-I4IJ3AFS.js";
 import {
   oneInchWallet
 } from "./chunk-XYRZ7P7D.js";
-import {
-  oneKeyWallet
-} from "./chunk-3HLN55HC.js";
 import {
   paraSwapWallet
 } from "./chunk-HNHU6JQX.js";
@@ -76,40 +76,37 @@ import {
 } from "./chunk-T4E2VVAF.js";
 import {
   rainbowWallet
-} from "./chunk-ZP4S2GWR.js";
+} from "./chunk-PVTXZTIX.js";
 import {
   ramperWallet
 } from "./chunk-FBPQKAPI.js";
 import {
-  kresusWallet
-} from "./chunk-3XKZT2XR.js";
-import {
   ledgerWallet
 } from "./chunk-QCCEG66M.js";
+import {
+  iopayWallet
+} from "./chunk-EHLR4MXR.js";
+import {
+  metaMaskWallet
+} from "./chunk-234I3MBV.js";
 import {
   mewWallet
 } from "./chunk-LM6LQU7E.js";
 import {
-  magicEdenWallet
-} from "./chunk-JXKNYAOS.js";
-import {
-  metaMaskWallet
-} from "./chunk-O7UHEHJ4.js";
+  oktoWallet
+} from "./chunk-QLUNENFW.js";
 import {
   nestWallet
 } from "./chunk-GMI6N3HE.js";
 import {
-  okxWallet
-} from "./chunk-ZH3OWOBB.js";
+  magicEdenWallet
+} from "./chunk-JXKNYAOS.js";
 import {
-  oktoWallet
-} from "./chunk-QLUNENFW.js";
+  oneKeyWallet
+} from "./chunk-3HLN55HC.js";
 import {
-  gateWallet
-} from "./chunk-2YMRJJBK.js";
-import {
-  imTokenWallet
-} from "./chunk-Z7ZJDREU.js";
+  enkryptWallet
+} from "./chunk-7ISAF7I4.js";
 import {
   injectedWallet
 } from "./chunk-RTDGOYZC.js";
@@ -117,44 +114,47 @@ import {
   hahaWallet
 } from "./chunk-CA6P53LD.js";
 import {
-  iopayWallet
-} from "./chunk-GO5X6ABM.js";
+  kaiaWallet
+} from "./chunk-UF6MVL23.js";
 import {
   kaikasWallet
-} from "./chunk-O44SRKZ2.js";
-import {
-  kaiaWallet
-} from "./chunk-UDJ44NLF.js";
+} from "./chunk-Q47S3UYI.js";
 import {
   krakenWallet
 } from "./chunk-5D72R5ZF.js";
 import {
+  imTokenWallet
+} from "./chunk-Z7ZJDREU.js";
+import {
+  kresusWallet
+} from "./chunk-3XKZT2XR.js";
+import {
   compassWallet
 } from "./chunk-GBA3YVS7.js";
-import {
-  coreWallet
-} from "./chunk-VWLXGDDA.js";
 import {
   dawnWallet
 } from "./chunk-W3Q5ZKDJ.js";
 import {
+  coreWallet
+} from "./chunk-RUQ7JSFI.js";
+import {
   desigWallet
 } from "./chunk-DHR7U3V5.js";
 import {
-  enkryptWallet
-} from "./chunk-7ISAF7I4.js";
+  frontierWallet
+} from "./chunk-S4G4TYNK.js";
 import {
   foxWallet
-} from "./chunk-AEM5TL2A.js";
-import {
-  frontierWallet
-} from "./chunk-PBHVATWW.js";
+} from "./chunk-Q634CHWQ.js";
 import {
   frameWallet
 } from "./chunk-J7HXHB6H.js";
 import {
-  bitskiWallet
-} from "./chunk-HPXAO4LN.js";
+  gateWallet
+} from "./chunk-X6EZMYEZ.js";
+import {
+  bestWallet
+} from "./chunk-3RLCEUVB.js";
 import {
   bitverseWallet
 } from "./chunk-SCGPXJ36.js";
@@ -166,13 +166,13 @@ import {
 } from "./chunk-LW34Z7PG.js";
 import {
   bybitWallet
-} from "./chunk-DGQTHWOF.js";
-import {
-  clvWallet
-} from "./chunk-GVCSJXWR.js";
+} from "./chunk-DE47DZLC.js";
 import {
   coin98Wallet
-} from "./chunk-57VE42ZM.js";
+} from "./chunk-VDERJTV3.js";
+import {
+  clvWallet
+} from "./chunk-PEGTYPXT.js";
 import {
   coinbaseWallet
 } from "./chunk-FX4LNCIQ.js";
@@ -183,23 +183,23 @@ import {
   backpackWallet
 } from "./chunk-CKT2LNXV.js";
 import {
-  berasigWallet
-} from "./chunk-LNGLUCEM.js";
-import {
-  bestWallet
-} from "./chunk-3RLCEUVB.js";
-import {
   bifrostWallet
-} from "./chunk-LVRRUFFO.js";
+} from "./chunk-WPL7BM67.js";
 import {
-  binanceWallet
-} from "./chunk-GFMMVFTO.js";
+  berasigWallet
+} from "./chunk-IB65UGP2.js";
 import {
   bitgetWallet
-} from "./chunk-UJO5IUAG.js";
+} from "./chunk-YMFMZ7ZT.js";
+import {
+  binanceWallet
+} from "./chunk-4V2OR2JK.js";
 import "./chunk-RETKWSKD.js";
-import "./chunk-WXICAEA2.js";
 import "./chunk-75A5A7MH.js";
+import {
+  bitskiWallet
+} from "./chunk-HPXAO4LN.js";
+import "./chunk-WXICAEA2.js";
 export {
   argentWallet,
   backpackWallet,
