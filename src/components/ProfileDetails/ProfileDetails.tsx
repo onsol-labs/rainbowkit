@@ -161,10 +161,11 @@ export function ProfileDetails({
             />
             {viewProfileAction && (
               <ProfileDetailsAction
-                action={viewProfileAction.action(address)}
+                action={() => viewProfileAction.action?.(address)} // Wrap action to pass address
                 icon={viewProfileAction.icon}
                 label={viewProfileAction.label}
                 testId="view-profile-button"
+                address={address} 
               />
             )}
           </Box>

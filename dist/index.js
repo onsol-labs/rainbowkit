@@ -3,11 +3,11 @@ import {
   darkTheme
 } from "./chunk-RZWDCITT.js";
 import {
-  midnightTheme
-} from "./chunk-7ZP3ENJ2.js";
-import {
   lightTheme
 } from "./chunk-72HZGUJA.js";
+import {
+  midnightTheme
+} from "./chunk-7ZP3ENJ2.js";
 import "./chunk-DQLAW7KN.js";
 import {
   en_US_default
@@ -3310,9 +3310,23 @@ function ProfileDetailsAction({
   icon,
   label,
   testId,
-  url
+  url,
+  address
 }) {
   const mobile = isMobile();
+  const handleClick = (event) => {
+    if (typeof action === "function") {
+      if (action.length === 0) {
+        if (address) {
+          action(address);
+        } else {
+          action;
+        }
+      } else {
+        action("");
+      }
+    }
+  };
   return /* @__PURE__ */ React33.createElement(
     Box,
     {
@@ -3328,7 +3342,7 @@ function ProfileDetailsAction({
         hover: !mobile ? "grow" : void 0
       }),
       display: "flex",
-      onClick: action,
+      onClick: handleClick,
       padding: mobile ? "6" : "8",
       style: { willChange: "transform" },
       testId,
@@ -3481,10 +3495,11 @@ function ProfileDetails({
     viewProfileAction && /* @__PURE__ */ React34.createElement(
       ProfileDetailsAction,
       {
-        action: viewProfileAction.action(address),
+        action: () => viewProfileAction.action?.(address),
         icon: viewProfileAction.icon,
         label: viewProfileAction.label,
-        testId: "view-profile-button"
+        testId: "view-profile-button",
+        address
       }
     )
   )), showRecentTransactions && /* @__PURE__ */ React34.createElement(React34.Fragment, null, /* @__PURE__ */ React34.createElement(Box, { background: "generalBorder", height: "1", marginTop: "-1" }), /* @__PURE__ */ React34.createElement(Box, null, /* @__PURE__ */ React34.createElement(TxList, { address })))));
