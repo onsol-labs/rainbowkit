@@ -1,13 +1,13 @@
 "use client";
 import {
-  lightTheme
-} from "./chunk-72HZGUJA.js";
-import {
   darkTheme
 } from "./chunk-RZWDCITT.js";
 import {
   midnightTheme
 } from "./chunk-7ZP3ENJ2.js";
+import {
+  lightTheme
+} from "./chunk-72HZGUJA.js";
 import "./chunk-DQLAW7KN.js";
 import {
   en_US_default
@@ -3481,7 +3481,7 @@ function ProfileDetails({
     viewProfileAction && /* @__PURE__ */ React34.createElement(
       ProfileDetailsAction,
       {
-        action: viewProfileAction.action,
+        action: viewProfileAction.action(address),
         icon: viewProfileAction.icon,
         label: viewProfileAction.label,
         testId: "view-profile-button"
@@ -6804,7 +6804,7 @@ function ConnectButton({
                 )
               },
               account.displayName
-            ), /* @__PURE__ */ React60.createElement(DropdownIcon, null))
+            ))
           )
         )
       )) : /* @__PURE__ */ React60.createElement(

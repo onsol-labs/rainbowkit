@@ -1,7 +1,7 @@
 import { type JSX } from 'react';
 interface ProfileDetailsActionProps {
     label: string;
-    action?: () => void;
+    action?: () => void | ((address: string) => void);
     icon: JSX.Element;
     url?: string;
     testId?: string;

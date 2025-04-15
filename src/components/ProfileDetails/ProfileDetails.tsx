@@ -28,7 +28,7 @@ export interface ProfileDetailsProps {
   onDisconnect: () => void;
   viewProfileAction?: {
     label: string;
-    action: () => void;
+    action: (address: string) => void;
     icon: JSX.Element;
   };
 }
@@ -161,7 +161,7 @@ export function ProfileDetails({
             />
             {viewProfileAction && (
               <ProfileDetailsAction
-                action={viewProfileAction.action}
+                action={viewProfileAction.action(address)}
                 icon={viewProfileAction.icon}
                 label={viewProfileAction.label}
                 testId="view-profile-button"

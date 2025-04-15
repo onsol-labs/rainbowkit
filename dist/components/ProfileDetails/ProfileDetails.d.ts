@@ -12,7 +12,7 @@ export interface ProfileDetailsProps {
     onDisconnect: () => void;
     viewProfileAction?: {
         label: string;
-        action: () => void;
+        action: (address: string) => void;
         icon: JSX.Element;
     };
 }

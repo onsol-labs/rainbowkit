@@ -253,7 +253,6 @@ export function ConnectButton({
                           >
                             {account.displayName}
                           </Box>
-                          <DropdownIcon />
                         </Box>
                       </Box>
                     </Box>

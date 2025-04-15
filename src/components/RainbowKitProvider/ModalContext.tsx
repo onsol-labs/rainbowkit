@@ -36,7 +36,7 @@ interface ModalContextValue {
   setIsWalletConnectModalOpen: (isWalletConnectModalOpen: boolean) => void;
   viewProfileAction?: {
     label: string;
-    action: () => void;
+    action: (address: string) => void;
     icon: JSX.Element;
   };
 }
@@ -53,7 +53,7 @@ interface ModalProviderProps {
   children: ReactNode;
   viewProfileAction?: {
     label: string;
-    action: () => void;
+    action: (address: string) => void;
     icon: JSX.Element;
   };
 }
