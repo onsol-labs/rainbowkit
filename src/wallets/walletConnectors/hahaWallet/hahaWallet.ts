@@ -1,7 +1,7 @@
 import type { DefaultWalletOptions, Wallet } from '../../Wallet';
 import { getWalletConnectConnector } from '../../getWalletConnectConnector';
 
-export const haha = ({
+export const hahaWallet = ({
   projectId,
   walletConnectParameters,
 }: DefaultWalletOptions): Wallet => ({

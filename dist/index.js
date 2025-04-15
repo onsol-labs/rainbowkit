@@ -1,10 +1,10 @@
 "use client";
 import {
-  darkTheme
-} from "./chunk-RZWDCITT.js";
-import {
   lightTheme
 } from "./chunk-72HZGUJA.js";
+import {
+  darkTheme
+} from "./chunk-RZWDCITT.js";
 import {
   midnightTheme
 } from "./chunk-7ZP3ENJ2.js";
