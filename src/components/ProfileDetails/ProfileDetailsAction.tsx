@@ -56,7 +56,7 @@ export function ProfileDetailsAction({
           {icon}
         </Box>
         <Box>
-          <Text color="modalText" size={mobile ? '12' : '13'} weight="semibold">
+          <Text color="modalText" size={'12'} weight="semibold">
             {label}
           </Text>
         </Box>
