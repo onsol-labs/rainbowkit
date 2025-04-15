@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useAccount, useDisconnect } from 'wagmi';
 import { useProfileMulti } from '../../hooks/useProfile';
 import { Dialog } from '../Dialog/Dialog';
 import { DialogContent } from '../Dialog/DialogContent';
 import { ProfileDetails } from '../ProfileDetails/ProfileDetails';
+import { useViewProfileData } from '../RainbowKitProvider/ModalContext';
 
 export interface AccountModalProps {
   open: boolean;
@@ -17,6 +18,7 @@ export function AccountModal({ onClose, open }: AccountModalProps) {
     includeBalance: open,
   });
   const { disconnect } = useDisconnect();
+  const { viewProfileAction } = useViewProfileData(); // Retrieve custom action
 
   if (!address) {
     return null;
@@ -36,6 +38,7 @@ export function AccountModal({ onClose, open }: AccountModalProps) {
               balance={balance}
               onClose={onClose}
               onDisconnect={disconnect}
+              viewProfileAction={viewProfileAction} // Pass custom action
             />
           </DialogContent>
         </Dialog>

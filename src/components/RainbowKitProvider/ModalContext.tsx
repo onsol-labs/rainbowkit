@@ -1,4 +1,5 @@
 import React, {
+  type JSX,
   type ReactNode,
   createContext,
   useCallback,
@@ -33,6 +34,11 @@ interface ModalContextValue {
   openConnectModal?: () => void;
   isWalletConnectModalOpen: boolean;
   setIsWalletConnectModalOpen: (isWalletConnectModalOpen: boolean) => void;
+  viewProfileAction?: {
+    label: string;
+    action: () => void;
+    icon: JSX.Element;
+  };
 }
 
 const ModalContext = createContext<ModalContextValue>({
@@ -45,9 +51,14 @@ const ModalContext = createContext<ModalContextValue>({
 
 interface ModalProviderProps {
   children: ReactNode;
+  viewProfileAction?: {
+    label: string;
+    action: () => void;
+    icon: JSX.Element;
+  };
 }
 
-export function ModalProvider({ children }: ModalProviderProps) {
+export function ModalProvider({ children, viewProfileAction }: ModalProviderProps) {
   const {
     closeModal: closeConnectModal,
     isModalOpen: connectModalOpen,
@@ -125,6 +136,7 @@ export function ModalProvider({ children }: ModalProviderProps) {
               ? openConnectModal
               : undefined,
           setIsWalletConnectModalOpen,
+          viewProfileAction,
         }),
         [
           connectionStatus,
@@ -136,6 +148,7 @@ export function ModalProvider({ children }: ModalProviderProps) {
           openConnectModal,
           isCurrentChainSupported,
           isWalletConnectModalOpen,
+          viewProfileAction,
         ],
       )}
     >
@@ -166,6 +179,11 @@ export function useAccountModal() {
 export function useChainModal() {
   const { chainModalOpen, openChainModal } = useContext(ModalContext);
   return { chainModalOpen, openChainModal };
+}
+
+export function useViewProfileData() {
+  const { viewProfileAction } = useContext(ModalContext);
+  return { viewProfileAction };
 }
 
 export function useWalletConnectOpenState() {

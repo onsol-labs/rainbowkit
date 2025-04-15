@@ -1,4 +1,4 @@
-import React, { type ReactNode, createContext, useContext } from 'react';
+import React, { type JSX, type ReactNode, createContext, useContext } from 'react';
 import { useAccountEffect } from 'wagmi';
 import type { Chain } from 'wagmi/chains';
 import { cssStringFromTheme } from '../../css/cssStringFromTheme';
@@ -73,6 +73,11 @@ export interface RainbowKitProviderProps {
   avatar?: AvatarComponent;
   modalSize?: ModalSizes;
   locale?: Locale;
+  viewProfileAction?: {
+    label: string;
+    action: () => void;
+    icon: JSX.Element;
+  };
 }
 
 const defaultTheme = lightTheme();
@@ -88,6 +93,7 @@ export function RainbowKitProvider({
   modalSize = ModalSizeOptions.WIDE,
   showRecentTransactions = false,
   theme = defaultTheme,
+  viewProfileAction, // New prop
 }: RainbowKitProviderProps) {
   usePreloadImages();
   useFingerprint();
@@ -123,7 +129,7 @@ export function RainbowKitProvider({
                     <AppContext.Provider value={appContext}>
                       <ThemeIdContext.Provider value={id}>
                         <ShowBalanceProvider>
-                          <ModalProvider>
+                          <ModalProvider viewProfileAction={viewProfileAction}>
                             {theme ? (
                               <div {...createThemeRootProps(id)}>
                                 <style

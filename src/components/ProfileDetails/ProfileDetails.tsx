@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import React, { type JSX, useCallback, useContext, useEffect, useState } from 'react';
 import type { GetEnsNameReturnType } from 'viem';
 import type { GetEnsAvatarReturnType } from 'viem/actions';
 import type { useAccount } from 'wagmi';
@@ -19,13 +19,18 @@ import { Text } from '../Text/Text';
 import { TxList } from '../Txs/TxList';
 import { ProfileDetailsAction } from './ProfileDetailsAction';
 
-interface ProfileDetailsProps {
+export interface ProfileDetailsProps {
   address: ReturnType<typeof useAccount>['address'];
   ensAvatar: GetEnsAvatarReturnType | undefined;
   ensName: GetEnsNameReturnType | undefined;
   balance: ReturnType<typeof useProfileMulti>['balance'];
   onClose: () => void;
   onDisconnect: () => void;
+  viewProfileAction?: {
+    label: string;
+    action: () => void;
+    icon: JSX.Element;
+  };
 }
 
 export function ProfileDetails({
@@ -35,6 +40,7 @@ export function ProfileDetails({
   balance,
   onClose,
   onDisconnect,
+  viewProfileAction,
 }: ProfileDetailsProps) {
   const showRecentTransactions = useContext(ShowRecentTransactionsContext);
 
@@ -153,6 +159,14 @@ export function ProfileDetails({
               label={i18n.t('profile.disconnect.label')}
               testId="disconnect-button"
             />
+            {viewProfileAction && (
+              <ProfileDetailsAction
+                action={viewProfileAction.action}
+                icon={viewProfileAction.icon}
+                label={viewProfileAction.label}
+                testId="view-profile-button"
+              />
+            )}
           </Box>
         </Box>
         {showRecentTransactions && (
