@@ -95,18 +95,6 @@ export const WalletButton = ({ wallet }: { wallet?: string }) => {
                         : connectorName}
                     </Box>
                   </Box>
-
-                  {connected ? (
-                    <Box
-                      background="connectionIndicator"
-                      borderColor="selectedOptionBorder"
-                      borderRadius="full"
-                      borderStyle="solid"
-                      borderWidth="1"
-                      height="8"
-                      width="8"
-                    />
-                  ) : null}
                 </Box>
               </Box>
             </Box>

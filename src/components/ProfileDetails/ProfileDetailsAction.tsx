@@ -28,7 +28,7 @@ export function ProfileDetailsAction({
       if (action.length === 0) {
         if (address) {action(address)} else {action}
       } else {
-        action(''); // Pass an empty string as the address (or replace with actual address if available)
+        if (address) {action(address)} else {action}
       }
     }
   };

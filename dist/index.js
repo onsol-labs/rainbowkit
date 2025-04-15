@@ -3,11 +3,11 @@ import {
   darkTheme
 } from "./chunk-RZWDCITT.js";
 import {
-  lightTheme
-} from "./chunk-72HZGUJA.js";
-import {
   midnightTheme
 } from "./chunk-7ZP3ENJ2.js";
+import {
+  lightTheme
+} from "./chunk-72HZGUJA.js";
 import "./chunk-DQLAW7KN.js";
 import {
   en_US_default
@@ -3323,7 +3323,11 @@ function ProfileDetailsAction({
           action;
         }
       } else {
-        action("");
+        if (address) {
+          action(address);
+        } else {
+          action;
+        }
       }
     }
   };
@@ -3495,7 +3499,7 @@ function ProfileDetails({
     viewProfileAction && /* @__PURE__ */ React34.createElement(
       ProfileDetailsAction,
       {
-        action: () => viewProfileAction.action?.(address),
+        action: viewProfileAction.action,
         icon: viewProfileAction.icon,
         label: viewProfileAction.label,
         testId: "view-profile-button",
@@ -7018,19 +7022,7 @@ var WalletButton2 = ({ wallet }) => {
               /* @__PURE__ */ React62.createElement(Box, { testId: `wallet-button-label-${connector?.id || ""}` }, loading ? i18n2.t("connect.status.connecting", {
                 wallet: connectorName
               }) : connectorName)
-            ),
-            connected ? /* @__PURE__ */ React62.createElement(
-              Box,
-              {
-                background: "connectionIndicator",
-                borderColor: "selectedOptionBorder",
-                borderRadius: "full",
-                borderStyle: "solid",
-                borderWidth: "1",
-                height: "8",
-                width: "8"
-              }
-            ) : null
+            )
           )
         )
       )
