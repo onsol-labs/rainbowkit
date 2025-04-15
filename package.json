@@ -1,102 +1,92 @@
 {
-  "name": "rainbowkit",
-  "private": true,
-  "version": "0.0.0",
+  "name": "@rainbow-me/rainbowkit",
+  "version": "2.2.4",
+  "description": "The best way to connect a wallet",
+  "files": [
+    "dist",
+    "styles.css",
+    "wallets"
+  ],
   "type": "module",
+  "exports": {
+    ".": "./dist/index.js",
+    "./styles.css": "./dist/index.css",
+    "./wallets": "./dist/wallets/walletConnectors/index.js"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "sideEffects": [
+    "src/css/reset.css.ts"
+  ],
+  "engines": {
+    "node": ">=12.4"
+  },
   "scripts": {
-    "prepare": "husky",
-    "dev": "pnpm --recursive --parallel --filter @rainbow-me/rainbow* --filter example dev",
-    "dev:lib": "pnpm --parallel --filter @rainbow-me/rainbow* dev",
-    "dev:example": "pnpm dev:lib & pnpm --filter example dev",
-    "dev:site": "pnpm dev:lib & pnpm --filter site dev",
-    "dev:cli": "pnpm --filter @rainbow-me/create-rainbowkit dev",
-    "dev:template:next-app": "pnpm --filter rainbowkit-next-app dev",
-    "build": "pnpm --recursive --parallel --filter=!rainbowkit-next-app build",
-    "start": "pnpm dev",
-    "lint": "biome lint . && pnpm format:check && pnpm --recursive typecheck",
-    "lint:fix": "biome lint . --write && pnpm format:fix",
-    "format:check": "biome check .",
-    "format:fix": "biome format . --write",
-    "link:cli": "cd packages/create-rainbowkit && pnpm link --global",
-    "test": "pnpm test:unit",
-    "test:unit": "vitest",
-    "test:update": "vitest --update",
-    "test:watch": "vitest --watch",
-    "test:cli": "pnpm --filter @rainbow-me/create-rainbowkit test:build",
-    "test:cli:dev": "pnpm --filter @rainbow-me/create-rainbowkit test:dev",
-    "test:cli:clean": "rm -rf ./packages/create-rainbowkit/generated-test-app",
-    "changeset": "changeset",
-    "clean": "rm -rf ./packages/rainbowkit/dist && rm -rf ./packages/rainbowkit-siwe-next-auth/dist && rm -rf ./packages/rainbow-button/dist && rm -rf ./packages/create-rainbowkit/dist && rm -rf ./packages/rainbowkit/node_modules && pnpm install",
-    "clean:untracked": "git clean -fxd -e '.env.local' -e '.env' && pnpm install",
-    "release": "pnpm release:verify-git && pnpm release:build && changeset publish --tag latest",
-    "release:verify-git": "git diff --exit-code && git rev-parse --abbrev-ref HEAD | grep \"main\"",
-    "release:build": "pnpm clean && pnpm lint && pnpm test && MINIFY_CSS=true pnpm --recursive --parallel --filter=!rainbowkit-next-app build && cp README.md packages/rainbowkit/README.md",
-    "release:test": "pnpm release:build && pnpm --filter example dev",
-    "ci:example": "pnpm --filter @rainbow-me/rainbow* prepare && pnpm --filter example build",
-    "ci:site": "pnpm --filter @rainbow-me/rainbow* prepare && pnpm --filter site build"
+    "build": "node build.js",
+    "build:watch": "node build.js --watch",
+    "dev": "pnpm build:watch & pnpm typegen:watch",
+    "prepare": "MINIFY_CSS=true pnpm build",
+    "prebuild": "pnpm typegen",
+    "typecheck": "pnpm tsc --noEmit",
+    "typegen": "tsc --emitDeclarationOnly || true",
+    "typegen:watch": "tsc --emitDeclarationOnly --watch"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/rainbow-me/rainbowkit.git"
-  },
+  "keywords": [
+    "ens",
+    "ethereum",
+    "react",
+    "react-hook",
+    "hooks",
+    "blockchain"
+  ],
+  "author": "Rainbow",
   "license": "MIT",
+  "peerDependencies": {
+    "@tanstack/react-query": ">=5.0.0",
+    "react": ">=18",
+    "react-dom": ">=18",
+    "viem": "2.x",
+    "wagmi": "^2.9.0"
+  },
   "devDependencies": {
-    "@biomejs/biome": "1.8.3",
-    "@changesets/cli": "2.27.8",
-    "@commitlint/cli": "^19.4.1",
-    "@commitlint/config-conventional": "^19.4.1",
-    "@tanstack/react-query": "^5.55.3",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.1.0",
     "@testing-library/user-event": "^14.5.2",
-    "@types/node": "^20.14.8",
-    "@types/react": "^19.0.6",
-    "@types/react-dom": "^19.0.3",
-    "@vanilla-extract/esbuild-plugin": "^2.3.10",
-    "@vanilla-extract/vite-plugin": "^4.0.15",
+    "@types/qrcode": "^1.5.5",
+    "@types/react": "^19.1.2",
+    "@types/react-dom": "^19.1.2",
+    "@types/ua-parser-js": "^0.7.39",
+    "@vanilla-extract/css-utils": "0.1.4",
+    "@vanilla-extract/private": "1.0.6",
     "autoprefixer": "^10.4.16",
     "dotenv": "^16.4.5",
-    "esbuild": "^0.25.0",
+    "esbuild": "^0.25.2",
     "esbuild-plugin-replace": "^1.4.0",
-    "husky": "^9.1.5",
     "jsdom": "^25.0.0",
-    "next": "^15.2.4",
-    "next-auth": "4.24.11",
+    "nock": "^13.4.0",
     "postcss": "^8.4.47",
-    "postcss-prefix-selector": "^1.16.1",
+    "postcss-prefix-selector": "^2.1.1",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "recursive-readdir-files": "^2.3.1",
-    "typescript": "5.5.4",
-    "viem": "2.23.3",
-    "vite": "^5.4.16",
-    "vitest": "2.1.9",
-    "wagmi": "^2.14.11"
+    "recursive-readdir-files": "^2.3.2",
+    "typescript": "^5.8.3",
+    "vitest": "2.1.9"
   },
-  "resolutions": {
-    "@types/react": "^19.0.6",
-    "@types/react-dom": "^19.0.3",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "elliptic": "6.6.1"
+  "dependencies": {
+    "@onsol/tldparser": "^1.0.4",
+    "@vanilla-extract/css": "1.15.5",
+    "@vanilla-extract/dynamic": "2.1.2",
+    "@vanilla-extract/esbuild-plugin": "^2.3.15",
+    "@vanilla-extract/sprinkles": "1.6.3",
+    "clsx": "2.1.1",
+    "ethers": "^6.13.5",
+    "qrcode": "1.5.4",
+    "react-remove-scroll": "2.6.2",
+    "ua-parser-js": "^1.0.37"
   },
-  "packageManager": "pnpm@10.7.1",
-  "pnpm": {
-    "ignoredBuiltDependencies": [
-      "@biomejs/biome",
-      "@vercel/speed-insights",
-      "bufferutil",
-      "contentlayer2",
-      "core-js",
-      "core-js-pure",
-      "keccak",
-      "protobufjs",
-      "sharp",
-      "utf-8-validate"
-    ],
-    "onlyBuiltDependencies": [
-      "esbuild"
-    ]
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rainbow-me/rainbowkit.git",
+    "directory": "packages/rainbowkit"
   }
 }
