@@ -1,10 +1,10 @@
 "use client";
 import {
-  lightTheme
-} from "./chunk-72HZGUJA.js";
-import {
   darkTheme
 } from "./chunk-RZWDCITT.js";
+import {
+  lightTheme
+} from "./chunk-72HZGUJA.js";
 import {
   midnightTheme
 } from "./chunk-7ZP3ENJ2.js";
@@ -2201,7 +2201,15 @@ function useWalletConnectors(mergeEIP6963WithRkConnectors = false) {
       showWalletConnectModal: wallet.walletConnectModalConnector ? () => connectToWalletConnectModal(wallet.walletConnectModalConnector) : void 0
     });
   }
-  return walletConnectors;
+  const seenIds = /* @__PURE__ */ new Set();
+  const dedupedWalletConnectors = [];
+  for (const wallet of walletConnectors) {
+    if (!seenIds.has(wallet.id)) {
+      seenIds.add(wallet.id);
+      dedupedWalletConnectors.push(wallet);
+    }
+  }
+  return dedupedWalletConnectors;
 }
 
 // src/components/Icons/Assets.tsx
