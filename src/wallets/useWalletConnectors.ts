@@ -214,5 +214,15 @@ export function useWalletConnectors(
         : undefined,
     });
   }
-  return walletConnectors;
+
+  // Deduplicate walletConnectors by wallet id, keeping the first occurrence (priority to 'Installed')
+  const seenIds = new Set<string>();
+  const dedupedWalletConnectors: WalletConnector[] = [];
+  for (const wallet of walletConnectors) {
+    if (!seenIds.has(wallet.id)) {
+      seenIds.add(wallet.id);
+      dedupedWalletConnectors.push(wallet);
+    }
+  }
+  return dedupedWalletConnectors;
 }
