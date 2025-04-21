@@ -2205,6 +2205,8 @@ function useWalletConnectors(mergeEIP6963WithRkConnectors = false) {
   const dedupedWalletConnectors = [];
   for (const wallet of walletConnectors) {
     if (!seenIds.has(wallet.id)) {
+      console.log(wallet.id);
+      console.log(wallet.name);
       seenIds.add(wallet.id);
       dedupedWalletConnectors.push(wallet);
     }
