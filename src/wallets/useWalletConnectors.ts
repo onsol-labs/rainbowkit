@@ -219,11 +219,8 @@ export function useWalletConnectors(
   const seenIds = new Set<string>();
   const dedupedWalletConnectors: WalletConnector[] = [];
   for (const wallet of walletConnectors) {
-    if (!seenIds.has(wallet.id)) {
-
-      console.log(wallet.id)
-      console.log(wallet.name)
-      seenIds.add(wallet.id);
+    if (!seenIds.has(wallet.name)) {
+      seenIds.add(wallet.name);
       dedupedWalletConnectors.push(wallet);
     }
   }
