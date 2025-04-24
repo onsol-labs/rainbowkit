@@ -63,7 +63,7 @@ export function ConnectButton({
         openConnectModal,
       }) => {
         const ready = mounted && connectionStatus !== 'loading';
-        const unsupportedChain = connectionStatus === 'connected' && (chain?.unsupported ?? false);
+        const unsupportedChain = chain?.unsupported ?? false;
 
         return (
           <Box
