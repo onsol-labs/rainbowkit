@@ -1,10 +1,10 @@
 "use client";
 import {
-  lightTheme
-} from "./chunk-72HZGUJA.js";
-import {
   darkTheme
 } from "./chunk-RZWDCITT.js";
+import {
+  lightTheme
+} from "./chunk-72HZGUJA.js";
 import {
   midnightTheme
 } from "./chunk-7ZP3ENJ2.js";
@@ -2188,7 +2188,7 @@ function useWalletConnectors(mergeEIP6963WithRkConnectors = false) {
     }
     walletConnectors.push({
       ...wallet,
-      ready: wallet.installed,
+      ready: wallet.installed ?? true,
       connect: () => connectWallet(wallet),
       desktopDownloadUrl: getDesktopDownloadUrl(wallet),
       extensionDownloadUrl: getExtensionDownloadUrl(wallet),
@@ -2203,14 +2203,17 @@ function useWalletConnectors(mergeEIP6963WithRkConnectors = false) {
   }
   const walletMap = /* @__PURE__ */ new Map();
   for (const wallet of walletConnectors) {
-    console.log(wallet);
     if (!walletMap.has(wallet.name)) {
       walletMap.set(wallet.name, []);
     }
     walletMap.get(wallet.name).push(wallet);
   }
   const dedupedWalletConnectors = [];
-  for (const wallets of walletMap.values()) {
+  const hasHahaWallet = walletMap.has("Haha Wallet");
+  for (const [name, wallets] of walletMap) {
+    if (name === "HaHa" && hasHahaWallet) {
+      continue;
+    }
     const readyWallet = wallets.find((wallet) => wallet.ready);
     dedupedWalletConnectors.push(readyWallet || wallets[0]);
   }

@@ -193,7 +193,7 @@ export function useWalletConnectors(
 
     walletConnectors.push({
       ...wallet,
-      ready: wallet.installed,
+      ready: wallet.installed ?? true,
       connect: () => connectWallet(wallet),
       desktopDownloadUrl: getDesktopDownloadUrl(wallet),
       extensionDownloadUrl: getExtensionDownloadUrl(wallet),
@@ -220,7 +220,6 @@ export function useWalletConnectors(
   const walletMap = new Map<string, WalletConnector[]>();
   // Group wallets by name
   for (const wallet of walletConnectors) {
-    console.log(wallet)
     if (!walletMap.has(wallet.name)) {
       walletMap.set(wallet.name, []);
     }
@@ -228,8 +227,12 @@ export function useWalletConnectors(
   }
 
   const dedupedWalletConnectors: WalletConnector[] = [];
-  // Select the first ready wallet or any wallet for each name
-  for (const wallets of walletMap.values()) {
+  // Select the first ready wallet or any wallet for each name, excluding "HaHa" if "Haha Wallet" exists
+  const hasHahaWallet = walletMap.has("Haha Wallet");
+  for (const [name, wallets] of walletMap) {
+    if (name === "HaHa" && hasHahaWallet) {
+      continue; // Skip "HaHa" if "Haha Wallet" exists
+    }
     const readyWallet = wallets.find(wallet => wallet.ready);
     dedupedWalletConnectors.push(readyWallet || wallets[0]);
   }
