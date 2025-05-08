@@ -1934,7 +1934,7 @@ function setRainbowKitVersion({ version }) {
 }
 function useFingerprint() {
   const fingerprint = useCallback2(() => {
-    setRainbowKitVersion({ version: "2.2.5" });
+    setRainbowKitVersion({ version: "2.2.6" });
   }, []);
   useEffect8(() => {
     fingerprint();
@@ -2188,7 +2188,7 @@ function useWalletConnectors(mergeEIP6963WithRkConnectors = false) {
     }
     walletConnectors.push({
       ...wallet,
-      ready: wallet.installed ?? true,
+      ready: wallet.installed,
       connect: () => connectWallet(wallet),
       desktopDownloadUrl: getDesktopDownloadUrl(wallet),
       extensionDownloadUrl: getExtensionDownloadUrl(wallet),
@@ -2201,15 +2201,7 @@ function useWalletConnectors(mergeEIP6963WithRkConnectors = false) {
       showWalletConnectModal: wallet.walletConnectModalConnector ? () => connectToWalletConnectModal(wallet.walletConnectModalConnector) : void 0
     });
   }
-  const seenIds = /* @__PURE__ */ new Set();
-  const dedupedWalletConnectors = [];
-  for (const wallet of walletConnectors) {
-    if (!seenIds.has(wallet.name)) {
-      seenIds.add(wallet.name);
-      dedupedWalletConnectors.push(wallet);
-    }
-  }
-  return dedupedWalletConnectors;
+  return walletConnectors;
 }
 
 // src/components/Icons/Assets.tsx
