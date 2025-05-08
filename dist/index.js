@@ -3,11 +3,11 @@ import {
   darkTheme
 } from "./chunk-RZWDCITT.js";
 import {
-  midnightTheme
-} from "./chunk-7ZP3ENJ2.js";
-import {
   lightTheme
 } from "./chunk-72HZGUJA.js";
+import {
+  midnightTheme
+} from "./chunk-7ZP3ENJ2.js";
 import "./chunk-DQLAW7KN.js";
 import {
   en_US_default
@@ -2202,16 +2202,14 @@ function useWalletConnectors(mergeEIP6963WithRkConnectors = false) {
       showWalletConnectModal: wallet.walletConnectModalConnector ? () => connectToWalletConnectModal(wallet.walletConnectModalConnector) : void 0
     });
   }
-  const seenIds = /* @__PURE__ */ new Set();
-  const dedupedWalletConnectors = [];
+  const walletById = {};
   for (const wallet of walletConnectors) {
-    console.log(wallet.name);
-    if (!seenIds.has(wallet.name)) {
-      seenIds.add(wallet.name);
-      dedupedWalletConnectors.push(wallet);
+    const existing = walletById[wallet.id];
+    if (!existing || !existing.ready && wallet.ready) {
+      walletById[wallet.id] = wallet;
     }
   }
-  return dedupedWalletConnectors;
+  return Object.values(walletById);
 }
 
 // src/components/Icons/Assets.tsx
