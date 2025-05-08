@@ -1,10 +1,10 @@
 "use client";
 import {
-  darkTheme
-} from "./chunk-RZWDCITT.js";
-import {
   lightTheme
 } from "./chunk-72HZGUJA.js";
+import {
+  darkTheme
+} from "./chunk-RZWDCITT.js";
 import {
   midnightTheme
 } from "./chunk-7ZP3ENJ2.js";
@@ -1934,7 +1934,7 @@ function setRainbowKitVersion({ version }) {
 }
 function useFingerprint() {
   const fingerprint = useCallback2(() => {
-    setRainbowKitVersion({ version: "2.2.7" });
+    setRainbowKitVersion({ version: "2.2.8" });
   }, []);
   useEffect8(() => {
     fingerprint();
@@ -2203,6 +2203,7 @@ function useWalletConnectors(mergeEIP6963WithRkConnectors = false) {
   }
   const walletMap = /* @__PURE__ */ new Map();
   for (const wallet of walletConnectors) {
+    console.log(wallet);
     if (!walletMap.has(wallet.name)) {
       walletMap.set(wallet.name, []);
     }

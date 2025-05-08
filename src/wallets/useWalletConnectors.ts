@@ -218,19 +218,20 @@ export function useWalletConnectors(
   // Deduplicate walletConnectors by wallet id, keeping the first occurrence (priority to 'Installed')
 
   const walletMap = new Map<string, WalletConnector[]>();
-// Group wallets by name
-for (const wallet of walletConnectors) {
+  // Group wallets by name
+  for (const wallet of walletConnectors) {
+    console.log(wallet)
     if (!walletMap.has(wallet.name)) {
-        walletMap.set(wallet.name, []);
+      walletMap.set(wallet.name, []);
     }
     walletMap.get(wallet.name)!.push(wallet);
-}
+  }
 
-const dedupedWalletConnectors: WalletConnector[] = [];
-// Select the first ready wallet or any wallet for each name
-for (const wallets of walletMap.values()) {
+  const dedupedWalletConnectors: WalletConnector[] = [];
+  // Select the first ready wallet or any wallet for each name
+  for (const wallets of walletMap.values()) {
     const readyWallet = wallets.find(wallet => wallet.ready);
     dedupedWalletConnectors.push(readyWallet || wallets[0]);
-}
+  }
   return dedupedWalletConnectors;
 }

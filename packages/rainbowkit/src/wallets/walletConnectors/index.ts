@@ -50,7 +50,6 @@ import { safeheronWallet } from './safeheronWallet/safeheronWallet';
 import { safepalWallet } from './safepalWallet/safepalWallet';
 import { seifWallet } from './seifWallet/seifWallet';
 import { subWallet } from './subWallet/subWallet';
-import { hahaWallet } from './safeWallet/hahaWallet';
 import { tahoWallet } from './tahoWallet/tahoWallet';
 import { talismanWallet } from './talismanWallet/talismanWallet';
 import { tokenPocketWallet } from './tokenPocketWallet/tokenPocketWallet';
