@@ -190,7 +190,7 @@ export function useWalletConnectors(
 
       continue;
     }
-
+    console.log(wallet.name, wallet.installed)
     walletConnectors.push({
       ...wallet,
       ready: wallet.installed,
@@ -219,8 +219,8 @@ export function useWalletConnectors(
   const seenIds = new Set<string>();
   const dedupedWalletConnectors: WalletConnector[] = [];
   for (const wallet of walletConnectors) {
+    console.log(wallet.name)
     if (!seenIds.has(wallet.name)) {
-      console.log(wallet.name)
       seenIds.add(wallet.name);
       dedupedWalletConnectors.push(wallet);
     }

@@ -3,11 +3,11 @@ import {
   darkTheme
 } from "./chunk-RZWDCITT.js";
 import {
-  lightTheme
-} from "./chunk-72HZGUJA.js";
-import {
   midnightTheme
 } from "./chunk-7ZP3ENJ2.js";
+import {
+  lightTheme
+} from "./chunk-72HZGUJA.js";
 import "./chunk-DQLAW7KN.js";
 import {
   en_US_default
@@ -2186,6 +2186,7 @@ function useWalletConnectors(mergeEIP6963WithRkConnectors = false) {
       });
       continue;
     }
+    console.log(wallet.name, wallet.installed);
     walletConnectors.push({
       ...wallet,
       ready: wallet.installed,
@@ -2204,8 +2205,8 @@ function useWalletConnectors(mergeEIP6963WithRkConnectors = false) {
   const seenIds = /* @__PURE__ */ new Set();
   const dedupedWalletConnectors = [];
   for (const wallet of walletConnectors) {
+    console.log(wallet.name);
     if (!seenIds.has(wallet.name)) {
-      console.log(wallet.name);
       seenIds.add(wallet.name);
       dedupedWalletConnectors.push(wallet);
     }
