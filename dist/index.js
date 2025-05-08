@@ -2201,7 +2201,15 @@ function useWalletConnectors(mergeEIP6963WithRkConnectors = false) {
       showWalletConnectModal: wallet.walletConnectModalConnector ? () => connectToWalletConnectModal(wallet.walletConnectModalConnector) : void 0
     });
   }
-  return walletConnectors;
+  const seenIds = /* @__PURE__ */ new Set();
+  const dedupedWalletConnectors = [];
+  for (const wallet of walletConnectors) {
+    if (!seenIds.has(wallet.name)) {
+      seenIds.add(wallet.name);
+      dedupedWalletConnectors.push(wallet);
+    }
+  }
+  return dedupedWalletConnectors;
 }
 
 // src/components/Icons/Assets.tsx
