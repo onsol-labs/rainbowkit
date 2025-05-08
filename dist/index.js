@@ -1934,7 +1934,7 @@ function setRainbowKitVersion({ version }) {
 }
 function useFingerprint() {
   const fingerprint = useCallback2(() => {
-    setRainbowKitVersion({ version: "2.2.8" });
+    setRainbowKitVersion({ version: "2.2.9" });
   }, []);
   useEffect8(() => {
     fingerprint();
