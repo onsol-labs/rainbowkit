@@ -2186,7 +2186,6 @@ function useWalletConnectors(mergeEIP6963WithRkConnectors = false) {
       });
       continue;
     }
-    console.log(wallet.name, wallet.installed);
     walletConnectors.push({
       ...wallet,
       ready: wallet.installed,
@@ -2202,14 +2201,19 @@ function useWalletConnectors(mergeEIP6963WithRkConnectors = false) {
       showWalletConnectModal: wallet.walletConnectModalConnector ? () => connectToWalletConnectModal(wallet.walletConnectModalConnector) : void 0
     });
   }
-  const walletById = {};
+  const walletMap = /* @__PURE__ */ new Map();
   for (const wallet of walletConnectors) {
-    const existing = walletById[wallet.id];
-    if (!existing || !existing.ready && wallet.ready) {
-      walletById[wallet.id] = wallet;
+    if (!walletMap.has(wallet.name)) {
+      walletMap.set(wallet.name, []);
     }
+    walletMap.get(wallet.name).push(wallet);
   }
-  return Object.values(walletById);
+  const dedupedWalletConnectors = [];
+  for (const wallets of walletMap.values()) {
+    const readyWallet = wallets.find((wallet) => wallet.ready);
+    dedupedWalletConnectors.push(readyWallet || wallets[0]);
+  }
+  return dedupedWalletConnectors;
 }
 
 // src/components/Icons/Assets.tsx

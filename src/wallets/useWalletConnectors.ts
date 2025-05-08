@@ -190,7 +190,7 @@ export function useWalletConnectors(
 
       continue;
     }
-    console.log(wallet.name, wallet.installed)
+
     walletConnectors.push({
       ...wallet,
       ready: wallet.installed,
@@ -215,13 +215,22 @@ export function useWalletConnectors(
     });
   }
 
-  // Deduplicate walletConnectors by wallet id, keeping the one with ready === true if possible
-  const walletById: Record<string, WalletConnector> = {};
-  for (const wallet of walletConnectors) {
-    const existing = walletById[wallet.id];
-    if (!existing || (!existing.ready && wallet.ready)) {
-      walletById[wallet.id] = wallet;
+  // Deduplicate walletConnectors by wallet id, keeping the first occurrence (priority to 'Installed')
+
+  const walletMap = new Map<string, WalletConnector[]>();
+// Group wallets by name
+for (const wallet of walletConnectors) {
+    if (!walletMap.has(wallet.name)) {
+        walletMap.set(wallet.name, []);
     }
-  }
-  return Object.values(walletById);
+    walletMap.get(wallet.name)!.push(wallet);
+}
+
+const dedupedWalletConnectors: WalletConnector[] = [];
+// Select the first ready wallet or any wallet for each name
+for (const wallets of walletMap.values()) {
+    const readyWallet = wallets.find(wallet => wallet.ready);
+    dedupedWalletConnectors.push(readyWallet || wallets[0]);
+}
+  return dedupedWalletConnectors;
 }
