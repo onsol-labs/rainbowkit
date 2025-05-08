@@ -236,7 +236,7 @@ export function MobileOptions({ onClose }: { onClose: () => void }) {
           >
             <Box display="flex" style={{ margin: '0 auto' }}>
               {wallets
-                .filter((wallet) => wallet.ready)
+                // .filter((wallet) => wallet.ready)
                 .map((wallet) => {
                   return (
                     <Box key={wallet.id} paddingX="20">

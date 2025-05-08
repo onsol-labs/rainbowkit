@@ -6108,7 +6108,7 @@ function MobileOptions({ onClose }) {
           paddingBottom: "20",
           paddingTop: "6"
         },
-        /* @__PURE__ */ React54.createElement(Box, { display: "flex", style: { margin: "0 auto" } }, wallets.filter((wallet) => wallet.ready).map((wallet) => {
+        /* @__PURE__ */ React54.createElement(Box, { display: "flex", style: { margin: "0 auto" } }, wallets.map((wallet) => {
           return /* @__PURE__ */ React54.createElement(Box, { key: wallet.id, paddingX: "20" }, /* @__PURE__ */ React54.createElement(Box, { width: "60" }, /* @__PURE__ */ React54.createElement(WalletButton, { onClose, wallet })));
         }))
       ), /* @__PURE__ */ React54.createElement(
