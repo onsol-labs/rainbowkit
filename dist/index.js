@@ -1934,7 +1934,7 @@ function setRainbowKitVersion({ version }) {
 }
 function useFingerprint() {
   const fingerprint = useCallback2(() => {
-    setRainbowKitVersion({ version: "2.2.6" });
+    setRainbowKitVersion({ version: "2.2.7" });
   }, []);
   useEffect8(() => {
     fingerprint();
@@ -2205,6 +2205,7 @@ function useWalletConnectors(mergeEIP6963WithRkConnectors = false) {
   const dedupedWalletConnectors = [];
   for (const wallet of walletConnectors) {
     if (!seenIds.has(wallet.name)) {
+      console.log(wallet.name);
       seenIds.add(wallet.name);
       dedupedWalletConnectors.push(wallet);
     }
