@@ -3,11 +3,11 @@ import {
   darkTheme
 } from "./chunk-RZWDCITT.js";
 import {
-  midnightTheme
-} from "./chunk-7ZP3ENJ2.js";
-import {
   lightTheme
 } from "./chunk-72HZGUJA.js";
+import {
+  midnightTheme
+} from "./chunk-7ZP3ENJ2.js";
 import "./chunk-DQLAW7KN.js";
 import {
   en_US_default
@@ -6092,9 +6092,7 @@ function WalletButton({
 }
 function MobileOptions({ onClose }) {
   const titleId = "rk_connect_title";
-  const wallets = useWalletConnectors().filter(
-    (wallet) => wallet.isRainbowKitConnector
-  );
+  const wallets = useWalletConnectors();
   const { disclaimer: Disclaimer, learnMoreUrl } = useContext18(AppContext);
   let headerLabel = null;
   let walletContent = null;
