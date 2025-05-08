@@ -23,7 +23,7 @@ export function addAnsName(address: Address, ansName: string) {
 
   const now = new Date();
 
-  const expiry = new Date(now.getTime() + 180 * 60_000); // Set expiry to 3 hours from now
+  const expiry = new Date(now.getTime() + 5 * 60_000); // Set expiry to 3 hours from now
 
   localStorage.setItem(
     getStorageAnsNameKey(address),

@@ -3,11 +3,11 @@ import {
   darkTheme
 } from "./chunk-RZWDCITT.js";
 import {
-  lightTheme
-} from "./chunk-72HZGUJA.js";
-import {
   midnightTheme
 } from "./chunk-7ZP3ENJ2.js";
+import {
+  lightTheme
+} from "./chunk-72HZGUJA.js";
 import "./chunk-DQLAW7KN.js";
 import {
   en_US_default
@@ -1417,7 +1417,7 @@ function safeParseJsonData2(string) {
 function addAnsName(address, ansName) {
   if (!isAddress2(address)) return;
   const now = /* @__PURE__ */ new Date();
-  const expiry = new Date(now.getTime() + 180 * 6e4);
+  const expiry = new Date(now.getTime() + 5 * 6e4);
   localStorage.setItem(
     getStorageAnsNameKey(address),
     JSON.stringify({
@@ -1474,8 +1474,8 @@ function useMonadTestnetAnsName(address) {
       queryKey: createQueryKey("address", address),
       queryFn: () => getOnchainAnsName({ address }),
       enabled: !!address,
-      staleTime: 10 * (60 * 1e3),
-      // 10 minutes
+      staleTime: 5 * (60 * 1e3),
+      // 5 minutes
       retry: 1
       // Retry once before returning undefined if the request fails
     });
@@ -2950,8 +2950,8 @@ function formatENS(name) {
   if (!name) return "";
   const parts = name.split(".");
   const last = parts.pop();
-  if (parts.join(".").length > 24) {
-    return `${parts.join(".").substring(0, 24)}...`;
+  if (parts.join(".").length > 7) {
+    return `${parts.join(".").substring(0, 7)}...`;
   }
   return `${parts.join(".")}.${last}`;
 }

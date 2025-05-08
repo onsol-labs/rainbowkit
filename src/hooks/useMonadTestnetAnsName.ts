@@ -35,7 +35,7 @@ export function useMonadTestnetAnsName(address?: Address) {
       queryKey: createQueryKey('address', address),
       queryFn: () => getOnchainAnsName({ address: address! }),
       enabled: !!address,
-      staleTime: 10 * (60 * 1_000), // 10 minutes
+      staleTime: 5 * (60 * 1_000), // 5 minutes
       retry: 1, // Retry once before returning undefined if the request fails
     });
     ansNameValue = ansName;
