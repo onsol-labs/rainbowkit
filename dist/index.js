@@ -1,10 +1,10 @@
 "use client";
 import {
-  darkTheme
-} from "./chunk-RZWDCITT.js";
-import {
   lightTheme
 } from "./chunk-72HZGUJA.js";
+import {
+  darkTheme
+} from "./chunk-RZWDCITT.js";
 import {
   midnightTheme
 } from "./chunk-7ZP3ENJ2.js";
@@ -1398,9 +1398,6 @@ function useMainnetEnsName(address) {
   return ensName || enhancedProviderEnsName;
 }
 
-// src/hooks/useMonadTestnetAnsName.ts
-import { monadTestnet } from "wagmi/chains";
-
 // src/utils/ans.ts
 import { isAddress as isAddress2 } from "viem";
 function getStorageAnsNameKey(address) {
@@ -1444,17 +1441,48 @@ function getAnsName(address) {
   return ansName;
 }
 
-// src/hooks/useMonadTestnetAnsName.ts
+// src/hooks/useMonadAnsName.ts
 import { NetworkWithRpc, TldParser } from "@onsol/tldparser";
 import { useQuery as useQuery2 } from "@tanstack/react-query";
+
+// src/hooks/monadMainnet.ts
+import { defineChain } from "viem";
+var monadMainnet = /* @__PURE__ */ defineChain({
+  id: 143,
+  name: "Monad",
+  nativeCurrency: {
+    name: "MON Token",
+    symbol: "MON",
+    decimals: 18
+  },
+  rpcUrls: {
+    default: {
+      http: ["https://rpc.monad.xyz"]
+    }
+  },
+  blockExplorers: {
+    default: {
+      name: "Monad explorer",
+      url: "https://monadscan.com"
+    }
+  },
+  contracts: {
+    multicall3: {
+      address: "0xcA11bde05977b3631167028862bE2a173976CA11",
+      blockCreated: 251449
+    }
+  }
+});
+
+// src/hooks/useMonadAnsName.ts
 async function getOnchainAnsName({ address }) {
   const ensName = getAnsName(address);
   if (ensName) return ensName;
   try {
     const network = new NetworkWithRpc(
-      monadTestnet.name,
-      monadTestnet.id,
-      monadTestnet.rpcUrls.default.http[0]
+      monadMainnet.name,
+      monadMainnet.id,
+      monadMainnet.rpcUrls.default.http[0]
     );
     const parser = new TldParser(network, "monad");
     const mainDomain = await parser.getMainDomain(address);
@@ -1467,7 +1495,7 @@ async function getOnchainAnsName({ address }) {
     return null;
   }
 }
-function useMonadTestnetAnsName(address) {
+function useMonadAnsName(address) {
   let ansNameValue = null;
   try {
     const { data: ansName } = useQuery2({
@@ -1487,10 +1515,10 @@ function useMonadTestnetAnsName(address) {
 }
 
 // src/hooks/useIsMonadTestnetConfigured.ts
-import { monadTestnet as monadTestnet2 } from "wagmi/chains";
+import { monadTestnet } from "wagmi/chains";
 function useIsMonadTestnetConfigured() {
   const rainbowKitChains = useRainbowKitChains();
-  const chainId = monadTestnet2.id;
+  const chainId = monadTestnet.id;
   const configured = rainbowKitChains.some(
     (rainbowKitChain) => rainbowKitChain.id === chainId
   );
@@ -1510,7 +1538,7 @@ function useProfileMonadTestnet({
   address,
   includeBalance
 }) {
-  const ansName = useMonadTestnetAnsName(address);
+  const ansName = useMonadAnsName(address);
   const { data: balance } = useBalance({
     address: includeBalance ? address : void 0
   });

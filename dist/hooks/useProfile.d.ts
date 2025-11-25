@@ -8,7 +8,6 @@ export declare function useProfile({ address, includeBalance }: UseProfileParame
     ensAvatar: import("viem").GetEnsAvatarReturnType | undefined;
     balance: {
         decimals: number;
-        formatted: string;
         symbol: string;
         value: bigint;
     } | undefined;
@@ -18,7 +17,6 @@ export declare function useProfileMonadTestnet({ address, includeBalance, }: Use
     ensAvatar: undefined;
     balance: {
         decimals: number;
-        formatted: string;
         symbol: string;
         value: bigint;
     } | undefined;
@@ -28,7 +26,6 @@ export declare function useProfileMulti({ address, includeBalance, }: UseProfile
     ensAvatar: import("viem").GetEnsAvatarReturnType | undefined;
     balance: {
         decimals: number;
-        formatted: string;
         symbol: string;
         value: bigint;
     } | undefined;
@@ -37,7 +34,6 @@ export declare function useProfileMulti({ address, includeBalance, }: UseProfile
     ensAvatar: undefined;
     balance: {
         decimals: number;
-        formatted: string;
         symbol: string;
         value: bigint;
     } | undefined;
